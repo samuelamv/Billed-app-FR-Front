@@ -11,7 +11,8 @@ describe("Given that I am a user on login page", () => {
   describe("When I do not fill fields and I click on employee button Login In", () => {
     test("Then It should renders Login page", () => {
       document.body.innerHTML = LoginUI();
-
+      screen.debug();
+      console.log(document.body.innerHTML);
       const inputEmailUser = screen.getByTestId("employee-email-input");
       expect(inputEmailUser.value).toBe("");
 
@@ -30,7 +31,7 @@ describe("Given that I am a user on login page", () => {
   describe("When I do fill fields in incorrect format and I click on employee button Login In", () => {
     test("Then It should renders Login page", () => {
       document.body.innerHTML = LoginUI();
-
+      console.log(document.body.innerHTML);
       const inputEmailUser = screen.getByTestId("employee-email-input");
       fireEvent.change(inputEmailUser, { target: { value: "pasunemail" } });
       expect(inputEmailUser.value).toBe("pasunemail");
@@ -50,7 +51,7 @@ describe("Given that I am a user on login page", () => {
 
   describe("When I do fill fields in correct format and I click on employee button Login In", () => {
     test("Then I should be identified as an Employee in app", () => {
-      document.body.innerHTML = LoginUI();
+      document.body.innerHTML = LoginUI();console.log(document.body.innerHTML);
       const inputData = {
         email: "johndoe@email.com",
         password: "azerty",
@@ -121,7 +122,7 @@ describe("Given that I am a user on login page", () => {
   describe("When I do not fill fields and I click on admin button Login In", () => {
     test("Then It should renders Login page", () => {
       document.body.innerHTML = LoginUI();
-
+      console.log(document.body.innerHTML);
       const inputEmailUser = screen.getByTestId("admin-email-input");
       expect(inputEmailUser.value).toBe("");
 
@@ -140,7 +141,7 @@ describe("Given that I am a user on login page", () => {
   describe("When I do fill fields in incorrect format and I click on admin button Login In", () => {
     test("Then it should renders Login page", () => {
       document.body.innerHTML = LoginUI();
-
+      console.log(document.body.innerHTML);
       const inputEmailUser = screen.getByTestId("admin-email-input");
       fireEvent.change(inputEmailUser, { target: { value: "pasunemail" } });
       expect(inputEmailUser.value).toBe("pasunemail");
@@ -161,6 +162,7 @@ describe("Given that I am a user on login page", () => {
   describe("When I do fill fields in correct format and I click on admin button Login In", () => {
     test("Then I should be identified as an HR admin in app", () => {
       document.body.innerHTML = LoginUI();
+      console.log(document.body.innerHTML);
       const inputData = {
         type: "Admin",
         email: "johndoe@email.com",

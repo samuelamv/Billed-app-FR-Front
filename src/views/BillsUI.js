@@ -9,7 +9,7 @@ const row = (bill) => {
     <tr>
       <td>${bill.type}</td>
       <td>${bill.name}</td>
-      <td>${bill.date}</td>
+      <td data-testid="bill-date">${bill.date}</td>
       <td>${bill.amount} €</td>
       <td>${bill.status}</td>
       <td>
@@ -47,7 +47,31 @@ export default ({ data: bills, loading, error }) => {
   } else if (error) {
     return ErrorPage(error)
   }
+  function parseFrenchDate(dateStr) {
+    const months = {
+      'Jan.': '01',
+      'Fév.': '02',
+      'Mar.': '03',
+      'Avr.': '04',
+      'Mai.': '05',
+      'Juin': '06',
+      'Juil.': '07',
+      'Aoû.': '08',
+      'Sep.': '09',
+      'Oct.': '10',
+      'Nov.': '11',
+      'Déc.': '12'
+    }
+    const [day, monthFr, year] = dateStr.split(' ')
+    const month = months[monthFr]
+    // Construire une date au format ISO : yyyy-mm-dd
+    return new Date(`20${year}-${month}-${day}`)
+  }
   
+  const sortedBills = bills && bills.length
+  ? bills.sort((a, b) => parseFrenchDate(b.date) - parseFrenchDate(a.date))
+  : []
+
   return (`
     <div class='layout'>
       ${VerticalLayout(120)}
@@ -69,7 +93,7 @@ export default ({ data: bills, loading, error }) => {
               </tr>
           </thead>
           <tbody data-testid="tbody">
-            ${rows(bills)}
+            ${rows(sortedBills)}
           </tbody>
           </table>
         </div>

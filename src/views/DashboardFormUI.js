@@ -68,7 +68,9 @@ export default (bill) => {
         <div class="col-sm">
           <label for="file" class="bold-label">Justificatif</label>
             <div class='input-field input-flex file-flex'>
-            <span id="file-name-admin">${bill.fileName}</span>
+            <span id="file-name-admin">
+              ${bill.fileName && bill.fileName !== "null" ? bill.fileName : "Nom de fichier indisponible"}
+            </span>
             <div class='icons-container'>
               <span id="icon-eye-d" data-testid="icon-eye-d" data-bill-url="${bill.fileUrl}"> ${eyeWhite} </span>
             </div>
