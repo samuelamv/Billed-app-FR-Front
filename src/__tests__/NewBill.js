@@ -60,34 +60,38 @@ describe("Given I am connected as an employee", () => {
     });
 
     test("Then it should call store.bills().update and navigate to Bills page on form submit", async () => {
-      const onNavigate = jest.fn();
-      const newBill = new NewBill({ document, onNavigate, store: mockStore, localStorage: window.localStorage });
+    const onNavigate = jest.fn()
+    const newBill = new NewBill({ document, onNavigate, store: mockStore, localStorage: window.localStorage })
+
+    // Espionner la méthode update
+    const updateSpy = jest.spyOn(mockStore.bills(), 'update')
+
+    // Simuler un fichier uploadé
+    newBill.fileName = "test.jpg"
+    newBill.fileUrl = "https://localhost/test.jpg"
+
+    // Récupérer les données du mock
+    const billData = (await mockStore.bills().list())[0]
+
+    // Remplir le formulaire avec les valeurs mockées
+    fireEvent.change(screen.getByTestId("expense-type"), { target: { value: billData.type } })
+    fireEvent.change(screen.getByTestId("expense-name"), { target: { value: billData.name } })
+    fireEvent.change(screen.getByTestId("datepicker"), { target: { value: billData.date } })
+    fireEvent.change(screen.getByTestId("amount"), { target: { value: billData.amount } })
+    fireEvent.change(screen.getByTestId("vat"), { target: { value: billData.vat } })
+    fireEvent.change(screen.getByTestId("pct"), { target: { value: billData.pct } })
+    fireEvent.change(screen.getByTestId("commentary"), { target: { value: billData.commentary } })
+
+    const form = screen.getByTestId("form-new-bill");
+
+    fireEvent.submit(form)
+
+    await waitFor(() => {
+      expect(updateSpy).toHaveBeenCalled()
+      expect(onNavigate).toHaveBeenCalledWith('#employee/bills')
+    })
+  })
     
-      // Espionner la méthode update
-      const updateSpy = jest.spyOn(mockStore.bills(), 'update');
-    
-      // Simuler un fichier uploadé
-      newBill.fileName = "test.jpg";
-      newBill.fileUrl = "https://localhost/test.jpg";
-    
-      // Remplir le formulaire
-      fireEvent.change(screen.getByTestId("expense-type"), { target: { value: "Transports" } });
-      fireEvent.change(screen.getByTestId("expense-name"), { target: { value: "Taxi" } });
-      fireEvent.change(screen.getByTestId("datepicker"), { target: { value: "2024-04-01" } });
-      fireEvent.change(screen.getByTestId("amount"), { target: { value: 50 } });
-      fireEvent.change(screen.getByTestId("vat"), { target: { value: "10" } });
-      fireEvent.change(screen.getByTestId("pct"), { target: { value: 20 } });
-      fireEvent.change(screen.getByTestId("commentary"), { target: { value: "Course pro" } });
-    
-      const form = screen.getByTestId("form-new-bill");
-    
-      fireEvent.submit(form);
-    
-      await waitFor(() => {
-        expect(updateSpy).toHaveBeenCalled();
-        expect(onNavigate).toHaveBeenCalled();
-      });
-    });    
     
   });
 });
